@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AutoHar Controller</title>
+  <style>
+    body { background:#181c24; color:#fff; font-family:Segoe UI,Arial,sans-serif; min-height:100vh; margin:0; display:flex; align-items:center; justify-content:center; }
+    .panel { background:#222334; border-radius:15px; padding:2.3rem 2.2rem 2rem 2.2rem; max-width:410px; width:95vw; box-sizing:border-box; box-shadow:0 4px 32px rgba(0,0,0,0.32); border:1.5px solid #49ffd7; text-align:center; }
+    h1 { font-size:2.1rem; font-weight:bold; margin-bottom:1.2em; color:#49ffd7; font-family:Orbitron,Arial,sans-serif; }
+    .input-token { width:90%; padding:0.9em 1em; background:#181e26; border:none; border-radius:9px; color:#eaeaea; font-size:1.07rem; margin-bottom:1.2em; margin-top:0.2em; box-sizing:border-box; }
+    .btn { background:linear-gradient(90deg,#5e7aff 0%,#3aeab7 100%); color:#fff; border:none; border-radius:10px; font-size:1.1rem; font-weight:bold; padding:0.7em 1.6em; cursor:pointer; margin-top:0.7em; margin-bottom:0.3em; }
+    .btn:hover { filter:brightness(1.12); }
+    .error { color:#f47b7b; margin:1em 0 0.7em 0; font-size:1.01rem; min-height:1.2em; }
+    .success { color:#7fffa8; margin:1em 0 1.4em 0; font-size:1.11rem; }
+    .control-panel { margin-top:1.2em; background:#23263a; border-radius:10px; padding:1.2em 1em 0.8em 1em; }
+    .logout-btn { margin-top:1.5em; background:#ff5860; color:#fff; font-size:1rem; border:none; border-radius:10px; padding:0.65em 1.4em; cursor:pointer; }
+    .logout-btn:hover { background:#e14949; }
+  </style>
+</head>
+<body>
+  <div class="panel" id="main-panel">
+    <h1>AutoHar Controller</h1>
+    <div id="login-panel">
+      <input type="text" id="token-input" class="input-token" placeholder="Paste your token here" autocomplete="off"/>
+      <br>
+      <button class="btn" onclick="login()">Login</button>
+      <div id="login-msg" class="error"></div>
+    </div>
+    <div id="control-panel" style="display:none;">
+      <div class="success">Access granted!</div>
+      <div class="control-panel">
+        <b>Welcome to your AutoHar Controller!</b>
+        <p>You can add your control actions here (e.g., reset, settings, etc).</p>
+      </div>
+      <button class="logout-btn" onclick="logout()">Logout</button>
+    </div>
+  </div>
+  <script>
+    function getUrlToken() {
+      const params = new URLSearchParams(window.location.search);
+      return params.get('token') || "";
+    }
+    function login() {
+      const urlToken = getUrlToken();
+      const inputToken = document.getElementById('token-input').value.trim();
+      const msg = document.getElementById('login-msg');
+      if (!inputToken) {
+        msg.textContent = "Please enter your token.";
+        return;
+      }
+      if (inputToken === urlToken && urlToken.length >= 10) {
+        msg.textContent = "";
+        document.getElementById('login-panel').style.display = "none";
+        document.getElementById('control-panel').style.display = "block";
+      } else {
+        msg.textContent = "Invalid token.";
+      }
+    }
+    function logout() {
+      document.getElementById('token-input').value = "";
+      document.getElementById('login-panel').style.display = "block";
+      document.getElementById('control-panel').style.display = "none";
+      document.getElementById('login-msg').textContent = "";
+    }
+    window.onload = function() {
+      const urlToken = getUrlToken();
+      if (urlToken) {
+        document.getElementById('token-input').value = urlToken;
+      }
+    }
+  </script>
+</body>
+</html>
