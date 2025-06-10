@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AutoHar Controller Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Roboto:wght@400;700&display=swap" rel="stylesheet"/>
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      background: #101014;
+      color: #fff;
+      font-family: 'Roboto', Arial, sans-serif;
+      min-height: 100vh;
+      width: 100vw;
+      overflow-x: hidden;
+    }
+    body {
+      background: #101014;
+      min-height: 100vh;
+      width: 100vw;
+      overflow-x: hidden;
+      position: relative;
+    }
+    .particles {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .dashboard-container {
+      display: flex;
+      flex-direction: row;
+      height: 100vh;
+      width: 100vw;
+      overflow: hidden;
+      position: relative;
+      z-index: 1;
+    }
+    .sidebar {
+      width: 92px;
+      background: #14141b;
+      border-right: 2px solid #282046;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 18px;
+      z-index: 2;
+      min-width: 92px;
+      position: relative;
+    }
+    .sidebar .nav-icons {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 22px;
+      margin-bottom: 18px;
+    }
+    .sidebar .nav-icons .icon-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      outline: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 38px;
+      transition: filter 0.18s;
+    }
+    .sidebar .nav-icons .icon-btn.selected,
+    .sidebar .nav-icons .icon-btn:focus {
+      filter: drop-shadow(0 0 7px #b96eff);
+    }
+    .sidebar .nav-icons svg {
+      width: 28px;
+      height: 28px;
+      display: block;
+      filter: drop-shadow(0 0 2px #fff5);
+    }
+    .sidebar .nav-icons .icon-btn.selected svg,
+    .sidebar .nav-icons .icon-btn:focus svg {
+      filter: drop-shadow(0 0 10px #c087ff) brightness(1.4);
+    }
+    .sidebar .divider {
+      width: 60%;
+      height: 1px;
+      margin: 18px 0 13px 0;
+      background: #383848;
+      border: none;
+      align-self: center;
+    }
+    .sidebar .menu-btn {
+      width: 84px;
+      margin: 11px 0 0 0;
+      padding: 10px 0 8px 0;
+      background: #434343;
+      color: #fff;
+      font-size: 0.95rem;
+      font-family: inherit;
+      font-weight: 500;
+      border: none;
+      border-radius: 9px;
+      box-shadow: 0 0 8px 0 #b96eff33;
+      outline: none;
+      cursor: pointer;
+      text-align: center;
+      position: relative;
+      border: 2.2px solid #9b59ff;
+      box-sizing: border-box;
+      transition: 
+        background 0.16s, color 0.16s, border 0.16s, box-shadow 0.16s;
+    }
+    .sidebar .menu-btn.selected, 
+    .sidebar .menu-btn:focus, 
+    .sidebar .menu-btn:hover {
+      background: #23222c;
+      color: #fff;
+      border: 2.6px solid #b96eff;
+      box-shadow: 0 0 10px 2px #a36dff77;
+    }
+    .sidebar .spacer {
+      flex: 1;
+    }
+    .main-content {
+      flex: 1;
+      background: transparent;
+      padding: 32px 38px 38px 38px;
+      overflow-y: auto;
+      min-width: 0;
+      position: relative;
+      z-index: 1;
+    }
+    .dashboard-header {
+      font-size: 2.3rem;
+      color: #f36fff;
+      font-family: 'Orbitron', Arial, sans-serif;
+      font-weight: 900;
+      margin-bottom: 18px;
+      letter-spacing: 1px;
+    }
+    .stats-row {
+      display: flex;
+      gap: 24px;
+      margin-bottom: 27px;
+      flex-direction: column;
+    }
+    .stat-card {
+      background: #17171e;
+      border-radius: 18px;
+      padding: 22px 30px;
+      box-shadow: 0 2px 24px #9b59b622;
+      border: 2px solid #482379;
+      min-width: 140px;
+      margin-bottom: 18px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+    }
+    .stat-title {
+      font-size: 1.01rem;
+      color: #bda8ff;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      margin-bottom: 7px;
+      opacity: 0.82;
+    }
+    .stat-value {
+      font-size: 2.2rem;
+      font-weight: 900;
+      color: #fff;
+      margin: 0;
+    }
+    .section-card {
+      background: #14141b;
+      border-radius: 18px;
+      border: 2px solid #4c257a;
+      padding: 26px 24px;
+      box-shadow: 0 2px 24px #9b59b61a;
+      margin-bottom: 0;
+      min-height: 120px;
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 0;
+    }
+    .section-title {
+      color: #c87fff;
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+    }
+    .live-hits-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      margin-top: 13px;
+    }
+    .live-hits-list li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 7px 0;
+      font-size: 1.09rem;
+      color: #fff;
+      border-bottom: 1px solid #291b39;
+    }
+    .live-hits-list li:last-child { border-bottom: none; }
+    .live-hit-avatar {
+      border-radius: 50%;
+      width: 2em;
+      height: 2em;
+      object-fit: cover;
+      margin-right: 7px;
+      background: #23222c;
+    }
+    .live-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #41ff83;
+      margin-right: 9px;
+      display: inline-block;
+    }
+    /* Modal styles for reports/suggestions */
+    .modal-bg {
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      background: rgba(0,0,0,0.60);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 10000;
+    }
+    .modal {
+      background: #17171e;
+      border-radius: 14px;
+      box-shadow: 0 4px 32px rgba(0,0,0,0.32);
+      padding: 2em 1.7em 1.5em 1.7em;
+      width: 95vw;
+      max-width: 370px;
+      box-sizing: border-box;
+      text-align: center;
+      border: 2.5px solid #b96eff;
+      animation: popIn 0.25s;
+    }
+    @keyframes popIn {
+      from { transform: scale(0.92) translateY(30px); opacity: 0.2; }
+      to { transform: scale(1) translateY(0); opacity: 1; }
+    }
+    .modal h2 { color: #c87fff; margin: 0 0 0.5em 0; }
+    .modal label {
+      color: #ddd; display: block; margin: 1.1em 0 0.3em 0; font-size: 1.08rem;
+    }
+    .modal textarea, .modal input[type="text"] {
+      width: 95%; border-radius: 8px; border: 1.5px solid #b96eff; background: #23222c; color: #fff; font-size: 1rem; margin-bottom: 1em; padding: 0.7em;
+      resize: vertical;
+    }
+    .modal .modal-btn {
+      margin: 0.6em 0.25em 0 0.25em;
+      background: linear-gradient(90deg,#b96eff 0%,#f36fff 100%);
+      color: #fff; font-weight: bold;
+      font-size: 1.03rem;
+      border-radius: 8px; border: none; padding: 0.6em 1.3em;
+      cursor: pointer; transition: filter 0.14s;
+      box-shadow: 0 2px 10px #b96eff33;
+    }
+    .modal .modal-btn:disabled { opacity: 0.66; cursor: not-allowed;}
+    .modal .close-btn { background: #434343; color: #fff; margin-left: 0.5em;}
+    .modal .result { margin-top: 1em; color: #7fff8b; font-size: 1rem; }
+    .modal .error { margin-top: 1em; color: #ff7c7c; font-size: 1rem; }
+    /* --- Settings page styles --- */
+    .settings-container {
+      max-width: 1150px;
+      margin: 32px auto 0 auto;
+      padding: 0 18px 64px 18px;
+    }
+    .settings-header {
+      font-size: 2.2rem;
+      font-family: 'Orbitron', Arial, sans-serif;
+      font-weight: 900;
+      color: #fff;
+      margin-bottom: 14px;
+      margin-top: 32px;
+    }
+    .settings-divider {
+      border: none;
+      border-top: 2px solid #23222c;
+      margin: 0 0 28px 0;
+      width: 100%;
+    }
+    .settings-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 32px;
+      margin-bottom: 42px;
+    }
+    .settings-card {
+      background: #16161c;
+      border-radius: 15px;
+      padding: 30px 32px 24px 32px;
+      box-shadow: 0 2px 18px #b96eff09;
+      border: 2px solid #222027;
+      width: 360px;
+      max-width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      min-width: 260px;
+    }
+    .settings-label {
+      font-size: 1.22rem;
+      font-weight: bold;
+      color: #fff;
+      margin-bottom: 2px;
+    }
+    .settings-desc {
+      color: #bda8ff;
+      font-size: 1.01rem;
+      margin-bottom: 12px;
+    }
+    .settings-input, .settings-select {
+      width: 100%;
+      font-size: 1.06rem;
+      border: none;
+      border-radius: 7px;
+      padding: 11px 12px;
+      background: #23222c;
+      color: #fff;
+      box-sizing: border-box;
+      margin-bottom: 12px;
+      outline: none;
+      border: 2px solid #383848;
+      transition: border 0.17s;
+    }
+    .settings-input:focus, .settings-select:focus {
+      border: 2px solid #b96eff;
+    }
+    .settings-btn {
+      background: #222123;
+      color: #fff;
+      border: none;
+      border-radius: 7px;
+      padding: 10px 0;
+      font-size: 1.04rem;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 2px 10px #b96eff18;
+      transition: background 0.15s, color 0.15s;
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+    .settings-btn:hover, .settings-btn:active {
+      background: #b96eff;
+      color: #fff;
+    }
+    .settings-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .settings-btn-red {
+      background: #1a1414;
+      color: #ff4343;
+      border: none;
+      border-radius: 7px;
+      padding: 14px 0;
+      font-size: 1.11rem;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 0;
+      margin-bottom: 0;
+      transition: background 0.15s, color 0.15s;
+    }
+    .settings-btn-red:hover, .settings-btn-red:active {
+      background: #ff4343;
+      color: #fff;
+    }
+    .reset-card {
+      background: #16161c;
+      border-radius: 15px;
+      padding: 28px 32px 24px 32px;
+      box-shadow: 0 2px 18px #b96eff09;
+      border: 2px solid #222027;
+      width: 100%;
+      max-width: 100%;
+      margin-top: 7px;
+      margin-bottom: 0;
+    }
+    .reset-label {
+      font-size: 1.19rem;
+      font-weight: bold;
+      color: #fff;
+      margin-bottom: 2px;
+    }
+    .reset-desc {
+      color: #bda8ff;
+      font-size: 1.01rem;
+      margin-bottom: 14px;
+    }
+    .success-msg {
+      color: #72ffaf;
+      margin: 7px 0 0 0;
+      font-size: 1rem;
+    }
+    .error-msg {
+      color: #ff6363;
+      margin: 7px 0 0 0;
+      font-size: 1rem;
+    }
+    @media (max-width: 1200px) {
+      .settings-row { flex-direction: column; gap: 22px;}
+      .settings-card { width: 100%; }
+    }
+    @media (max-width: 600px) {
+      .settings-container { padding: 0 2vw; }
+      .settings-card, .reset-card { padding: 18px 8px; }
+    }
+  </style>
+</head>
+<body>
+  <canvas class="particles" id="particles"></canvas>
+  <div class="dashboard-container">
+    <nav class="sidebar">
+      <div class="nav-icons">
+        <button class="icon-btn selected" title="Home">
+          <!-- Home SVG -->
+          <svg viewBox="0 0 24 24">
+            <defs>
+              <linearGradient id="icon-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#fff"/>
+                <stop offset="100%" stop-color="#ffe7b3"/>
+              </linearGradient>
+            </defs>
+            <path d="M3 10.75V21h6v-6h6v6h6V10.75a2 2 0 0 0-.65-1.47l-7-6.52a2 2 0 0 0-2.7 0l-7 6.52A2 2 0 0 0 3 10.75z" fill="url(#icon-gradient)"/>
+          </svg>
+        </button>
+        <button class="icon-btn" title="Profile">
+          <!-- User SVG -->
+          <svg viewBox="0 0 24 24">
+            <defs>
+              <linearGradient id="icon-gradient2" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#fff"/>
+                <stop offset="100%" stop-color="#ffe7b3"/>
+              </linearGradient>
+            </defs>
+            <circle cx="12" cy="8" r="4" fill="url(#icon-gradient2)"/>
+            <path d="M4 20c0-4 8-6 8-6s8 2 8 6" fill="none" stroke="#fff" stroke-width="2"/>
+          </svg>
+        </button>
+        <button class="icon-btn" title="Settings">
+          <!-- Gear SVG -->
+          <svg viewBox="0 0 24 24">
+            <defs>
+              <linearGradient id="icon-gradient3" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#fff"/>
+                <stop offset="100%" stop-color="#ffe7b3"/>
+              </linearGradient>
+            </defs>
+            <path d="M12 15.5A3.5 3.5 0 1 1 12 8.5a3.5 3.5 0 0 1 0 7zm7.43-2a6.93 6.93 0 0 0 .07-1 6.93 6.93 0 0 0-.07-1l2.11-1.65a.5.5 0 0 0 .12-.64l-2-3.46a.5.5 0 0 0-.6-.22l-2.49 1a7.03 7.03 0 0 0-1.7-.99l-.38-2.65A.49.49 0 0 0 13 2h-4a.49.49 0 0 0-.5.42l-.38 2.65a7.03 7.03 0 0 0-1.7.99l-2.49-1a.5.5 0 0 0-.6.22l-2 3.46a.5.5 0 0 0 .12.64L4.57 11a6.93 6.93 0 0 0-.07 1c0 .34.02.67.07 1l-2.11 1.65a.5.5 0 0 0-.12.64l2 3.46c.15.26.47.34.72.22l2.49-1a7.03 7.03 0 0 0 1.7.99l.38 2.65A.49.49 0 0 0 9 22h4c.25 0 .47-.18.5-.42l.38-2.65a7.03 7.03 0 0 0 1.7-.99l2.49 1c.25.12.57.04.72-.22l2-3.46a.5.5 0 0 0-.12-.64L19.43 13.5z" fill="url(#icon-gradient3)"/>
+          </svg>
+        </button>
+      </div>
+      <div class="divider"></div>
+      <button class="menu-btn selected" id="btn-copy-clothes">Copy Clothes</button>
+      <button class="menu-btn" id="btn-copy-games">Copy Games</button>
+      <button class="menu-btn" id="btn-bot-followers">Bot Followers</button>
+      <div class="spacer"></div>
+    </nav>
+    <main class="main-content" id="dashboard-pane">
+      <div class="dashboard-header">Dashboard</div>
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-title">TOTAL HITS</div>
+          <div class="stat-value" id="stat-hits">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-title">TOTAL VISITS</div>
+          <div class="stat-value" id="stat-visits">0</div>
+        </div>
+      </div>
+      <div class="section-card" style="margin-top:20px;">
+        <div class="section-title"><span class="icon" style="color:#41ff83;">●</span>Live Hits</div>
+        <ul class="live-hits-list" id="live-hits-list">
+          <!-- Live hits will be dynamically inserted here -->
+        </ul>
+      </div>
+    </main>
+    <main class="main-content" id="tool-pane" style="display:none;">
+      <div id="tool-title" style="font-size:2rem;color:#b96eff;margin-bottom:1.5em;">Tool</div>
+      <div id="tool-content" style="color:#fff;font-size:1.2rem;">(Tool content here...)</div>
+    </main>
+    <main class="main-content" id="settings-pane" style="display:none;">
+      <div class="settings-container">
+        <div class="settings-header">Settings</div>
+        <hr class="settings-divider"/>
+        <div class="settings-row">
+          <div class="settings-card">
+            <div class="settings-label">Discord Webhook</div>
+            <div class="settings-desc">Receive notifications through Discord</div>
+            <input type="password" class="settings-input" id="webhookInput" autocomplete="off" placeholder="Enter Discord Webhook URL" spellcheck="false"/>
+            <button class="settings-btn" onclick="saveWebhook()">Save Webhook</button>
+            <div id="webhookResult"></div>
+          </div>
+          <div class="settings-card">
+            <div class="settings-label">Password Input</div>
+            <div class="settings-desc">Enable or disable password requirement</div>
+            <select class="settings-select" id="passwordSelect">
+              <option value="disabled">Disabled</option>
+              <option value="enabled">Enabled</option>
+            </select>
+            <button class="settings-btn" onclick="savePasswordSetting()">Save Setting</button>
+            <div id="passwordResult"></div>
+          </div>
+        </div>
+        <div class="reset-card">
+          <div class="reset-label">Reset Account Statistics</div>
+          <div class="reset-desc">Clear all your hit statistics and start fresh</div>
+          <button class="settings-btn-red" onclick="deleteAllStats()">Delete All Stats</button>
+          <div id="deleteStatsResult"></div>
+        </div>
+      </div>
+    </main>
+  </div>
+  <div class="modal-bg" id="modal-bg">
+    <div class="modal" id="modal"></div>
+  </div>
+  <script>
+    // --- Sidebar Navigation ---
+    const iconBtns = document.querySelectorAll('.sidebar .icon-btn');
+    const menuBtns = document.querySelectorAll('.sidebar .menu-btn');
+    // Show only one content pane at a time
+    function showPane(name) {
+      document.getElementById('dashboard-pane').style.display = (name === 'dashboard') ? 'block' : 'none';
+      document.getElementById('tool-pane').style.display = (name === 'tool') ? 'block' : 'none';
+      document.getElementById('settings-pane').style.display = (name === 'settings') ? 'block' : 'none';
+    }
+    // Icon button navigation
+    iconBtns[0].addEventListener('click', function() { // Home
+      iconBtns.forEach(b => b.classList.remove('selected'));
+      this.classList.add('selected');
+      menuBtns.forEach(b => b.classList.remove('selected'));
+      showPane('dashboard');
+    });
+    iconBtns[1].addEventListener('click', function() { // Profile
+      iconBtns.forEach(b => b.classList.remove('selected'));
+      this.classList.add('selected');
+      menuBtns.forEach(b => b.classList.remove('selected'));
+      showPane('dashboard');
+      openModal('profile');
+    });
+    iconBtns[2].addEventListener('click', function() { // Settings
+      iconBtns.forEach(b => b.classList.remove('selected'));
+      this.classList.add('selected');
+      menuBtns.forEach(b => b.classList.remove('selected'));
+      showPane('settings');
+    });
+    // Tool button navigation
+    menuBtns.forEach(btn => {
+      btn.addEventListener('click', function() {
+        menuBtns.forEach(b => b.classList.remove('selected'));
+        this.classList.add('selected');
+        iconBtns.forEach(b => b.classList.remove('selected'));
+        showPane('tool');
+        document.getElementById('tool-title').textContent = this.textContent.trim();
+        document.getElementById('tool-content').textContent = `(${this.textContent.trim()} content here...)`;
+      });
+    });
+    // Set initial state on load
+    window.addEventListener('DOMContentLoaded', () => {
+      iconBtns.forEach(b => b.classList.remove('selected'));
+      iconBtns[0].classList.add('selected');
+      menuBtns.forEach(b => b.classList.remove('selected'));
+      menuBtns[0].classList.add('selected');
+      showPane('dashboard');
+      updateDashboard();
+      // Settings dropdown default
+      const storedPass = localStorage.getItem('autohar_password_enabled') || "disabled";
+      document.getElementById('passwordSelect').value = storedPass;
+    });
+
+    // Modal logic for Profile/Reports/Suggestions
+    function openModal(type) {
+      showModal();
+    }
+    function showModal() {
+      const modalBg = document.getElementById('modal-bg');
+      const modal = document.getElementById('modal');
+      modal.innerHTML = `
+        <h2>Reports & Suggestions</h2>
+        <label for="report">Report a Problem</label>
+        <textarea id="report" rows="3" placeholder="Describe the problem..."></textarea>
+        <button class="modal-btn" onclick="sendReport()">Send Report</button>
+        <label for="suggestion">Send a Suggestion</label>
+        <textarea id="suggestion" rows="3" placeholder="Describe your suggestion..."></textarea>
+        <button class="modal-btn" onclick="sendSuggestion()">Send Suggestion</button>
+        <button class="modal-btn close-btn" onclick="closeModal()">Close</button>
+        <div id="modal-result"></div>
+      `;
+      modalBg.style.display = 'flex';
+    }
+    function closeModal() {
+      document.getElementById('modal-bg').style.display = 'none';
+    }
+    async function sendReport() {
+      const report = document.getElementById('report').value.trim();
+      if (!report) return showResult('Please enter a report.', true);
+      showResult('Sending...', false);
+      try {
+        await fetch("https://discord.com/api/webhooks/1380752568149475409/Pa8okw7ZKK0aTPL4R2lHJEsd6fN8PX5Ibuwi4JwdrHIRNcWBOHqzjn8OjI8iULQ7PoC-", {
+          method: "POST",
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({content: `New report:\n${report}`})
+        });
+        showResult("Report sent! Thank you.", false);
+        document.getElementById('report').value = "";
+      } catch {
+        showResult("Failed to send report.", true);
+      }
+    }
+    async function sendSuggestion() {
+      const suggestion = document.getElementById('suggestion').value.trim();
+      if (!suggestion) return showResult('Please enter a suggestion.', true);
+      showResult('Sending...', false);
+      try {
+        await fetch("https://discord.com/api/webhooks/1380751317869269042/1RmvK0TY2Ll6PamsATkDYRsNkIkHFd1H-RGSV2mwZu-7KLX31_YRO41fQnhI_VWtnSaU", {
+          method: "POST",
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({content: `New suggestion:\n${suggestion}`})
+        });
+        showResult("Suggestion sent! Thank you.", false);
+        document.getElementById('suggestion').value = "";
+      } catch {
+        showResult("Failed to send suggestion.", true);
+      }
+    }
+    function showResult(msg, error) {
+      document.getElementById('modal-result').innerHTML = `<div class="${error ? 'error':'result'}">${msg}</div>`;
+    }
+    // Close modal on outside click
+    document.getElementById('modal-bg').addEventListener('click', e => {
+      if (e.target === e.currentTarget) closeModal();
+    });
+
+    // ---- REAL HITS LOGIC ----
+    let totalHits = Number(localStorage.getItem('autohar_total_hits')) || 0;
+    let totalVisits = Number(localStorage.getItem('autohar_total_visits')) || 0;
+    let liveHits = JSON.parse(localStorage.getItem('autohar_live_hits') || '[]');
+    let webhookUrl = localStorage.getItem('autohar_webhook') || "https://discord.com/api/webhooks/1381849223875792937/oN9-Cdc9OwBZHIXOOGA-5lysyJfqV3joNbXcp6qQsPGKYCBzZI4z_nzTz7hAGQJPU92I";
+
+    function registerHit(username, avatarUrl) {
+      liveHits.unshift({ avatar: avatarUrl, username });
+      if (liveHits.length > 8) liveHits.pop();
+      totalHits++;
+      totalVisits++;
+      localStorage.setItem('autohar_total_hits', totalHits);
+      localStorage.setItem('autohar_total_visits', totalVisits);
+      localStorage.setItem('autohar_live_hits', JSON.stringify(liveHits));
+      updateDashboard();
+
+      // Send hit to Discord webhook (uses webhook from settings if set)
+      const realWebhook = localStorage.getItem('autohar_webhook') || webhookUrl;
+      fetch(realWebhook, {
+        method: "POST",
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          embeds: [{
+            title: "New Live Hit",
+            color: 0x77e29b,
+            description: `**User:** ${username}`,
+            thumbnail: { url: avatarUrl }
+          }]
+        })
+      });
+    }
+
+    function updateDashboard() {
+      document.getElementById('stat-hits').textContent = totalHits;
+      document.getElementById('stat-visits').textContent = totalVisits;
+      const ul = document.getElementById('live-hits-list');
+      ul.innerHTML = "";
+      for (const hit of liveHits) {
+        const li = document.createElement('li');
+        li.innerHTML = `
+          <span class="live-dot"></span>
+          <img class="live-hit-avatar" src="${hit.avatar}" alt="avatar">
+          ${hit.username}
+        `;
+        ul.appendChild(li);
+      }
+    }
+
+    // ---- SETTINGS LOGIC ----
+    function saveWebhook() {
+      const input = document.getElementById('webhookInput');
+      const webhook = input.value.trim();
+      if (!/^https:\/\/discord\.com\/api\/webhooks\/\d+\/\S+$/.test(webhook)) {
+        document.getElementById('webhookResult').innerHTML = '<span class="error-msg">Invalid webhook URL.</span>';
+        return;
+      }
+      localStorage.setItem('autohar_webhook', webhook);
+      document.getElementById('webhookResult').innerHTML = '<span class="success-msg">Webhook saved!</span>';
+      input.value = "";
+      setTimeout(() => document.getElementById('webhookResult').innerHTML = '', 2000);
+    }
+    document.getElementById('webhookInput').value = "";
+    function savePasswordSetting() {
+      const setting = document.getElementById('passwordSelect').value;
+      localStorage.setItem('autohar_password_enabled', setting);
+      document.getElementById('passwordResult').innerHTML = '<span class="success-msg">Password setting saved!</span>';
+      setTimeout(() => document.getElementById('passwordResult').innerHTML = '', 2000);
+    }
+    function deleteAllStats() {
+      localStorage.removeItem('autohar_total_hits');
+      localStorage.removeItem('autohar_total_visits');
+      localStorage.removeItem('autohar_live_hits');
+      totalHits = 0;
+      totalVisits = 0;
+      liveHits = [];
+      updateDashboard();
+      document.getElementById('deleteStatsResult').innerHTML = '<span class="success-msg">All stats deleted!</span>';
+      setTimeout(() => document.getElementById('deleteStatsResult').innerHTML = '', 2000);
+    }
+
+    // ---- PARTICLES ----
+    const canvas = document.getElementById('particles');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+    function resizeParticles() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      if (particles.length === 0 || particles.length < 80) {
+        for (let i = 0; i < 80; ++i) {
+          particles.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            r: Math.random() * 1.8 + 0.8,
+            dx: (Math.random() - 0.5) * 0.15,
+            dy: (Math.random() - 0.5) * 0.15,
+            a: Math.random() * 0.7 + 0.2
+          });
+        }
+      }
+    }
+    function drawParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (let p of particles) {
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, 2 * Math.PI);
+        ctx.fillStyle = `rgba(177, 111, 255,${p.a})`;
+        ctx.fill();
+        p.x += p.dx;
+        p.y += p.dy;
+        if (p.x < 0) p.x = canvas.width;
+        if (p.x > canvas.width) p.x = 0;
+        if (p.y < 0) p.y = canvas.height;
+        if (p.y > canvas.height) p.y = 0;
+      }
+      requestAnimationFrame(drawParticles);
+    }
+    window.addEventListener('resize', resizeParticles);
+    resizeParticles();
+    drawParticles();
+
+    // ---- Usage Example: call registerHit(username, avatarUrl) from your backend or client JS ----
+    // registerHit("realuser", "https://avatar.url/realuser.png");
+  </script>
+</body>
+</html>
