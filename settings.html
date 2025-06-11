@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Settings</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Roboto:wght@400;700&display=swap" rel="stylesheet"/>
+  <style>
+    body {
+      background: #101014;
+      color: #fff;
+      font-family: 'Roboto', Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .settings-container {
+      background: #17171e;
+      border-radius: 18px;
+      padding: 40px 50px;
+      box-shadow: 0 2px 24px #9b59b622;
+      border: 2px solid #482379;
+      min-width: 340px;
+      max-width: 90vw;
+    }
+    .settings-header {
+      font-size: 2rem;
+      color: #f36fff;
+      font-family: 'Orbitron', Arial, sans-serif;
+      font-weight: 900;
+      margin-bottom: 26px;
+      letter-spacing: 1px;
+      text-align: center;
+    }
+    label {
+      display: block;
+      margin-bottom: 10px;
+      font-size: 1.08rem;
+      color: #bda8ff;
+    }
+    input[type="text"] {
+      width: 100%;
+      padding: 8px;
+      border-radius: 7px;
+      border: 1.3px solid #6b47c7;
+      background: #23222c;
+      color: #fff;
+      margin-bottom: 18px;
+      font-size: 1rem;
+    }
+    button {
+      background: #b96eff;
+      color: #18111d;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 22px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+      margin-top: 8px;
+    }
+    button:hover {
+      background: #f36fff;
+      color: #23222c;
+    }
+    .danger {
+      background: #ff5c5c;
+      color: #fff;
+      margin-top: 18px;
+      margin-bottom: 8px;
+      border: 2px solid #c32e2e;
+    }
+    .danger:hover {
+      background: #d32f2f;
+      color: #fff;
+    }
+    .result {
+      margin-top: 18px;
+      background: #23222c;
+      border-radius: 8px;
+      padding: 14px;
+      color: #bda8ff;
+      font-size: 1rem;
+      border: 1px solid #6b47c7;
+    }
+  </style>
+</head>
+<body>
+  <div class="settings-container">
+    <div class="settings-header">Settings</div>
+    <form id="settingsForm" autocomplete="off">
+      <label for="webhook">Change Webhook URL</label>
+      <input type="text" id="webhook" name="webhook" placeholder="Enter new webhook URL">
+      <button type="submit">Save Webhook</button>
+    </form>
+    <button class="danger" id="deleteStatsBtn">Delete Stats (Reset Hits)</button>
+    <div id="result" class="result" style="display:none;"></div>
+  </div>
+  <script>
+    // Simulate localStorage for hits
+    if(localStorage.getItem('hits') === null) {
+      localStorage.setItem('hits', '0');
+    }
+
+    document.getElementById('deleteStatsBtn').onclick = function() {
+      localStorage.setItem('hits', '0');
+      document.getElementById('result').textContent = "Stats deleted! Your hits have been reset.";
+      document.getElementById('result').style.display = "block";
+    };
+
+    document.getElementById('settingsForm').onsubmit = function(e) {
+      e.preventDefault();
+      const webhook = document.getElementById('webhook').value.trim();
+      let msg = "";
+      if(webhook) {
+        localStorage.setItem('webhook', webhook);
+        msg += `Webhook changed to: ${webhook}.`;
+      } else {
+        msg += "Please enter a webhook URL.";
+      }
+      document.getElementById('result').textContent = msg;
+      document.getElementById('result').style.display = "block";
+    };
+  </script>
+</body>
+</html>
